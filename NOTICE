@@ -1,0 +1,59 @@
+sisa-attention
+==============
+
+This package contains original code. No third-party source code is copied
+into it. Several published methods shaped its design, and they are credited
+below. The license terms named here are those of the respective reference
+implementations; they are listed for attribution only.
+
+
+Methods
+-------
+
+Forget gate (FoX)
+    The additive forget-gate term F_i - F_j, with F the cumulative sum of
+    log sigmoid(z), follows the Forgetting Transformer, and the structure of
+    its backward pass follows the scheme of the reference FoX implementation
+    (MIT License).
+    Paper: "Forgetting Transformer: Softmax Attention with a Forget Gate"
+    (ICLR 2025).
+
+Chunked state-space decomposition (Mamba-2 SSD)
+    The exact chunk-factored evaluation of the decay exp(g_i - g_j) as
+    row factor x per-tile scalar x column factor follows the chunked
+    structured state-space duality (SSD) algorithm of Mamba-2. Its reference
+    implementation is distributed under the Apache License 2.0.
+    Paper: "Transformers are SSMs: Generalized Models and Efficient Algorithms
+    Through Structured State Space Duality" (ICML 2024).
+
+Data-dependent rotation (Mamba-3)
+    The rotation of C and B by the cumulative data-dependent phase
+    Phi_t = sum of theta_tau (the rotary form of a complex-valued state
+    update) follows Mamba-3. Its reference implementation (mamba_ssm) is
+    distributed under the Apache License 2.0.
+    Paper: "Mamba-3: Improved Sequence Modeling using State Space Principles"
+    (ICLR 2026).
+
+FlashAttention-style tiling
+    The online-softmax forward kernel and the split of the backward pass into
+    a dq kernel and a dk/dv kernel follow FlashAttention-2.
+    Papers: "FlashAttention: Fast and Memory-Efficient Exact Attention with
+    IO-Awareness" (NeurIPS 2022) and "FlashAttention-2: Faster Attention with
+    Better Parallelism and Work Partitioning" (ICLR 2024).
+
+Chunked linear cross-entropy (optional kernel)
+    The optional fused LM-head cross-entropy in sisa.kernels.linear_ce, which
+    processes the vocabulary chunk by chunk and never materializes the full
+    logits tensor, follows the approach of Liger Kernel (BSD 2-Clause License).
+    Paper: "Liger Kernel: Efficient Triton Kernels for LLM Training" (2024).
+
+
+Software
+--------
+
+PyTorch and Triton are runtime dependencies and are not redistributed.
+
+The examples can optionally use the GPT-NeoX-20B tokenizer through the
+`tokenizers` library; it is downloaded at run time and is not redistributed.
+Paper: "GPT-NeoX-20B: An Open-Source Autoregressive Language Model"
+(2022).

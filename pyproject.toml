@@ -1,0 +1,64 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sisa-attention"
+version = "0.1.0"
+description = "SISA: causal softmax attention with a rotated state-space score term and a forget gate, with exact Triton kernels and a pure-PyTorch reference."
+readme = "README.md"
+requires-python = ">=3.10"
+# Triton is not listed: Linux CUDA wheels of torch>=2.7 bundle a compatible
+# Triton (>=3.3). Pinning it separately tends to conflict with torch. Without
+# Triton the package falls back to the pure-PyTorch backend.
+dependencies = ["torch>=2.7"]
+keywords = [
+    "attention",
+    "transformer",
+    "state-space-model",
+    "language-model",
+    "triton",
+    "pytorch",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+[project.optional-dependencies]
+# safetensors I/O for save_pretrained / from_pretrained (falls back to torch.save).
+io = ["safetensors>=0.4"]
+# GPT-NeoX tokenizer, used only by the examples.
+tokenizer = ["tokenizers>=0.19"]
+test = ["pytest>=8", "numpy", "mpmath"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+sisa = ["py.typed"]
+
+# Neutral owner in the sdist's tar headers.
+[tool.distutils.sdist]
+owner = "root"
+group = "root"
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+addopts = "-ra --strict-markers"
+markers = [
+    "cuda: needs an NVIDIA GPU (sm80+) with Triton >= 3.3; skipped otherwise",
+    "slow: long-running exhaustive grids; deselect with -m 'not slow'",
+]
+filterwarnings = [
+    # Emitted by torch when the first cuBLAS call of a process happens inside autograd's backward thread.
+    "ignore:Attempting to run cuBLAS, but there was no current CUDA context:UserWarning",
+]

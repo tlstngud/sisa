@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+
+# Tooling caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+.ipynb_checkpoints/
+.triton/
+
+# Weights, checkpoints and token data (never commit these)
+*.pt
+*.pth
+*.ckpt
+*.bin
+*.safetensors
+*.npy
+*.npz
+checkpoints/
+runs/
+
+# Example outputs (save_pretrained directories used in the README and examples)
+my-sisa/
+sisa-50m*/
+sisa-152m*/
+sisa-369m*/
+
+# Secrets, logs and crash dumps
+.env
+.env.*
+*.log
+nohup.out
+wandb/
+core.[0-9]*
+
+# Editors and OS files
+.idea/
+.vscode/
+*.swp
+.DS_Store
